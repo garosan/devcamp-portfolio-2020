@@ -1,5 +1,5 @@
 class BlogPostsController < ApplicationController
-  before_action :set_blog_post, only: [:show, :edit, :update, :destroy]
+  before_action :set_blog_post, only: [:show, :edit, :update, :destroy, :toggle_status]
 
   # GET /blog_posts
   # GET /blog_posts.json
@@ -56,10 +56,20 @@ class BlogPostsController < ApplicationController
     end
   end
 
+  def toggle_status
+    if @blog_post.draft?
+      @blog_post.published!
+    elsif @blog_post.published?
+      @blog_post.draft!
+    end
+
+    redirect_to blog_posts_url, notice: 'Post status has been updated.'
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_blog_post
-      @blog_post = BlogPost.find(params[:id])
+      @blog_post = BlogPost.friendly.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
