@@ -4,7 +4,12 @@ Rails.application.routes.draw do
 
   get 'about', to: 'pages#about'
   get 'contact', to: 'pages#contact'
-  resources :blog_posts
+
+  resources :blog_posts do
+    member do 
+      get :toggle_status
+    end
+  end
   
   root to: 'pages#home'
 end
